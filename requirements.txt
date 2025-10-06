@@ -1,0 +1,16 @@
+# Manejo de datos
+pandas==2.2.2
+numpy==1.26.4
+
+# Machine Learning
+scikit-learn==1.5.2
+
+# Visualización
+matplotlib==3.9.2
+seaborn==0.13.2
+
+# Guardar y cargar modelos
+joblib==1.4.2
+
+# Jupyter notebooks (opcional, útil para análisis)
+jupyter==1.0.0
