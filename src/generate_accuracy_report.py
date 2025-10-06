@@ -19,7 +19,6 @@ def generate_accuracy_report(features_path: str, original_csv_path: str = "data/
     df_features = pd.read_csv(features_path)
     
     # Obtener ausencias reales del dataset original
-    # Convertir ausencias a clasificación multiclase
     df_original['ausencia_real'] = df_original['ausencia'].fillna('Presente')
     df_original['ausencia_real'] = df_original['ausencia_real'].astype(str).str.strip().str.lower()
     
@@ -44,16 +43,35 @@ def generate_accuracy_report(features_path: str, original_csv_path: str = "data/
         'ausencia_predicha': predicciones
     })
     
-    # Calcular métricas por fecha
+    # ✅ MÉTRICAS MEJORADAS - Más claras y específicas
     metricas_por_fecha = df_comparacion.groupby('fecha').apply(lambda x: pd.Series({
-        'predicciones_acertadas': (x['ausencia_real'] == x['ausencia_predicha']).sum(),
-        'total_ausencias_reales': (x['ausencia_real'] == 1).sum(),
-        'total_registros': len(x)
+        # Métricas generales
+        'total_registros': len(x),
+        'predicciones_correctas': (x['ausencia_real'] == x['ausencia_predicha']).sum(),
+        
+        # Métricas por clase
+        'total_presentes_reales': (x['ausencia_real'] == 0).sum(),
+        'total_ausentes_reales': (x['ausencia_real'] == 1).sum(),
+        'total_tardanzas_reales': (x['ausencia_real'] == 2).sum(),
+        
+        # Predicciones acertadas por clase
+        'presentes_acertados': ((x['ausencia_real'] == 0) & (x['ausencia_predicha'] == 0)).sum(),
+        'ausentes_acertados': ((x['ausencia_real'] == 1) & (x['ausencia_predicha'] == 1)).sum(),
+        'tardanzas_acertadas': ((x['ausencia_real'] == 2) & (x['ausencia_predicha'] == 2)).sum(),
+        
+        # Errores
+        'falsos_positivos_ausencia': ((x['ausencia_real'] != 1) & (x['ausencia_predicha'] == 1)).sum(),
+        'falsos_negativos_ausencia': ((x['ausencia_real'] == 1) & (x['ausencia_predicha'] != 1)).sum(),
     })).reset_index()
     
-    # Calcular tasa de predicción acertada (TPA)
-    metricas_por_fecha['tpa'] = (metricas_por_fecha['predicciones_acertadas'] / 
-                                   metricas_por_fecha['total_registros'] * 100)
+    # Calcular tasas de acierto
+    metricas_por_fecha['tasa_global'] = (metricas_por_fecha['predicciones_correctas'] / 
+                                          metricas_por_fecha['total_registros'] * 100)
+    
+    metricas_por_fecha['tasa_ausencias'] = (
+        metricas_por_fecha['ausentes_acertados'] / 
+        metricas_por_fecha['total_ausentes_reales'].replace(0, 1) * 100
+    ).fillna(0)
     
     # Formatear fecha
     metricas_por_fecha['fecha_str'] = metricas_por_fecha['fecha'].dt.strftime('%d/%m/%Y')
@@ -62,10 +80,13 @@ def generate_accuracy_report(features_path: str, original_csv_path: str = "data/
     metricas_por_fecha = metricas_por_fecha.sort_values('fecha')
     
     # Calcular métricas globales
-    total_predicciones = metricas_por_fecha['total_registros'].sum()
-    total_acertadas = metricas_por_fecha['predicciones_acertadas'].sum()
-    tpa_global = (total_acertadas / total_predicciones * 100) if total_predicciones > 0 else 0
-    total_ausencias_reales = metricas_por_fecha['total_ausencias_reales'].sum()
+    total_registros = metricas_por_fecha['total_registros'].sum()
+    total_correctas = metricas_por_fecha['predicciones_correctas'].sum()
+    tasa_global = (total_correctas / total_registros * 100) if total_registros > 0 else 0
+    
+    total_ausentes_reales = metricas_por_fecha['total_ausentes_reales'].sum()
+    ausentes_acertados = metricas_por_fecha['ausentes_acertados'].sum()
+    tasa_ausencias_global = (ausentes_acertados / total_ausentes_reales * 100) if total_ausentes_reales > 0 else 0
     
     # Generar HTML
     html_content = f"""
@@ -87,7 +108,7 @@ def generate_accuracy_report(features_path: str, original_csv_path: str = "data/
                 min-height: 100vh;
             }}
             .container {{
-                max-width: 1200px;
+                max-width: 1400px;
                 margin: 0 auto;
                 background: white;
                 border-radius: 15px;
@@ -168,7 +189,7 @@ def generate_accuracy_report(features_path: str, original_csv_path: str = "data/
                 text-align: left;
                 font-weight: 600;
                 text-transform: uppercase;
-                font-size: 12px;
+                font-size: 11px;
                 letter-spacing: 1px;
             }}
             td {{
@@ -210,79 +231,113 @@ def generate_accuracy_report(features_path: str, original_csv_path: str = "data/
             .accuracy-fill-red {{
                 background: linear-gradient(90deg, #e74c3c, #c0392b);
             }}
+            .info-box {{
+                background: #e8f4f8;
+                border-left: 4px solid #3498db;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 5px;
+            }}
+            .info-box strong {{
+                color: #2c3e50;
+            }}
         </style>
     </head>
     <body>
         <div class="container">
             <div class="header">
                 <h1>🎯 Reporte de Precisión de Predicciones</h1>
-                <p>Comparación de Predicciones vs Datos Reales por Fecha</p>
+                <p>Análisis Detallado de Predicciones vs Datos Reales</p>
                 <p>Generado: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}</p>
             </div>
 
             <div class="summary">
                 <div class="card">
                     <h3>Precisión Global</h3>
-                    <div class="value" style="color: #3498db;">{tpa_global:.1f}%</div>
-                    <div class="percentage">{total_acertadas:,} de {total_predicciones:,}</div>
+                    <div class="value" style="color: #3498db;">{tasa_global:.1f}%</div>
+                    <div class="percentage">{total_correctas:,} / {total_registros:,}</div>
                 </div>
                 <div class="card">
-                    <h3>Total Predicciones</h3>
-                    <div class="value" style="color: #34495e;">{total_predicciones:,}</div>
+                    <h3>Total Registros</h3>
+                    <div class="value" style="color: #34495e;">{total_registros:,}</div>
                 </div>
                 <div class="card">
-                    <h3>Predicciones Acertadas</h3>
-                    <div class="value" style="color: #27ae60;">{total_acertadas:,}</div>
+                    <h3>Predicciones Correctas</h3>
+                    <div class="value" style="color: #27ae60;">{total_correctas:,}</div>
                 </div>
                 <div class="card">
-                    <h3>Total Ausencias Reales</h3>
-                    <div class="value" style="color: #e74c3c;">{total_ausencias_reales:,}</div>
+                    <h3>🔴 Precisión en Ausencias</h3>
+                    <div class="value" style="color: #e74c3c;">{tasa_ausencias_global:.1f}%</div>
+                    <div class="percentage">{ausentes_acertados:,} / {total_ausentes_reales:,}</div>
                 </div>
             </div>
 
             <div class="content">
+                <div class="info-box">
+                    <p><strong>📊 Cómo leer este reporte:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li><strong>Precisión Global:</strong> Porcentaje de TODAS las predicciones correctas (presentes, ausentes y tardanzas)</li>
+                        <li><strong>Ausencias Detectadas:</strong> De todas las ausencias reales, cuántas detectó el modelo</li>
+                        <li><strong>Tasa Global = Predicciones Correctas / Total Registros</strong></li>
+                    </ul>
+                </div>
+
                 <h2>📊 Precisión de Predicciones por Fecha</h2>
-                <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 14px;">
-                    <strong>PA = Predicciones Acertadas</strong> | <strong>TA = Total Ausencias Reales</strong> | <strong>TPA = Tasa de Predicción Acertada</strong>
-                </p>
                 <table>
                     <thead>
                         <tr>
                             <th>Fecha</th>
-                            <th>Predicciones Acertadas (PA)</th>
-                            <th>Total de Ausencias Reales (TA)</th>
-                            <th>Tasa de Predicción Acertada (TPA)</th>
+                            <th>Total Registros</th>
+                            <th>✅ Correctas</th>
+                            <th>🔴 Ausencias Reales</th>
+                            <th>🎯 Ausencias Detectadas</th>
+                            <th>Precisión Global</th>
+                            <th>Precisión en Ausencias</th>
                         </tr>
                     </thead>
                     <tbody>
     """
 
     for _, row in metricas_por_fecha.iterrows():
-        tpa = row['tpa']
+        tasa = row['tasa_global']
+        tasa_aus = row['tasa_ausencias']
         
-        # Determinar clase de fila y color de barra
-        if tpa >= 90:
+        # Determinar clase de fila
+        if tasa >= 90:
             row_class = "high-accuracy"
             bar_color = "accuracy-fill-green"
-        elif tpa >= 75:
+        elif tasa >= 75:
             row_class = "high-accuracy"
             bar_color = "accuracy-fill-green"
-        elif tpa >= 60:
+        elif tasa >= 60:
             row_class = "medium-accuracy"
             bar_color = "accuracy-fill-yellow"
         else:
             row_class = "low-accuracy"
             bar_color = "accuracy-fill-red"
         
+        ausentes_reales = int(row['total_ausentes_reales'])
+        ausentes_detectados = int(row['ausentes_acertados'])
+        
         html_content += f"""
                         <tr class="{row_class}">
                             <td><strong>{row['fecha_str']}</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">{int(row['predicciones_acertadas'])}</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">{int(row['total_ausencias_reales'])}</strong></td>
+                            <td style="text-align: center;">{int(row['total_registros'])}</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">{int(row['predicciones_correctas'])}</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">{ausentes_reales}</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">{ausentes_detectados}</strong> / {ausentes_reales}
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">{tpa:.1f}%</strong>
+                                <strong style="font-size: 16px;">{tasa:.1f}%</strong>
                                 <div class="accuracy-bar">
-                                    <div class="accuracy-fill {bar_color}" style="width: {min(tpa, 100)}%"></div>
+                                    <div class="accuracy-fill {bar_color}" style="width: {min(tasa, 100)}%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: {'#27ae60' if tasa_aus >= 80 else '#f39c12' if tasa_aus >= 60 else '#e74c3c'};">{tasa_aus:.1f}%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill {'accuracy-fill-green' if tasa_aus >= 80 else 'accuracy-fill-yellow' if tasa_aus >= 60 else 'accuracy-fill-red'}" style="width: {min(tasa_aus, 100)}%"></div>
                                 </div>
                             </td>
                         </tr>
@@ -293,11 +348,12 @@ def generate_accuracy_report(features_path: str, original_csv_path: str = "data/
                     <tfoot style="background: #f8f9fa; font-weight: bold;">
                         <tr>
                             <td style="padding: 15px;"><strong>TOTAL</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">{total_acertadas:,}</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">{total_ausencias_reales:,}</strong></td>
-                            <td>
-                                <strong style="font-size: 18px;">Promedio: {tpa_global:.1f}%</strong>
-                            </td>
+                            <td style="text-align: center;"><strong>{total_registros:,}</strong></td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">{total_correctas:,}</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">{total_ausentes_reales:,}</strong></td>
+                            <td style="text-align: center;"><strong style="color: #3498db;">{ausentes_acertados:,}</strong></td>
+                            <td><strong>{tasa_global:.1f}%</strong></td>
+                            <td><strong>{tasa_ausencias_global:.1f}%</strong></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -319,10 +375,9 @@ def generate_accuracy_report(features_path: str, original_csv_path: str = "data/
     print("\n✅ Reporte de precisión generado:")
     print("   📄 HTML: reports/reporte_precision.html")
     print("   📊 CSV:  data/processed/metricas_precision_por_fecha.csv")
-    print(f"\n🎯 Precisión Global del Modelo: {tpa_global:.2f}%")
-    print(f"   ✅ Predicciones Acertadas: {total_acertadas:,}")
-    print(f"   📊 Total Predicciones: {total_predicciones:,}")
-    print(f"   🔴 Total Ausencias Reales: {total_ausencias_reales:,}")
+    print(f"\n🎯 Métricas Globales:")
+    print(f"   ✅ Precisión Global: {tasa_global:.2f}% ({total_correctas:,}/{total_registros:,})")
+    print(f"   🔴 Precisión en Ausencias: {tasa_ausencias_global:.2f}% ({ausentes_acertados:,}/{total_ausentes_reales:,})")
     print("\n💡 Abre el archivo HTML en tu navegador para ver el reporte visual completo")
 
 if __name__ == "__main__":

@@ -17,7 +17,7 @@
                 min-height: 100vh;
             }
             .container {
-                max-width: 1200px;
+                max-width: 1400px;
                 margin: 0 auto;
                 background: white;
                 border-radius: 15px;
@@ -98,7 +98,7 @@
                 text-align: left;
                 font-weight: 600;
                 text-transform: uppercase;
-                font-size: 12px;
+                font-size: 11px;
                 letter-spacing: 1px;
             }
             td {
@@ -140,58 +140,88 @@
             .accuracy-fill-red {
                 background: linear-gradient(90deg, #e74c3c, #c0392b);
             }
+            .info-box {
+                background: #e8f4f8;
+                border-left: 4px solid #3498db;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 5px;
+            }
+            .info-box strong {
+                color: #2c3e50;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="header">
                 <h1>🎯 Reporte de Precisión de Predicciones</h1>
-                <p>Comparación de Predicciones vs Datos Reales por Fecha</p>
-                <p>Generado: 06/10/2025 15:33:59</p>
+                <p>Análisis Detallado de Predicciones vs Datos Reales</p>
+                <p>Generado: 06/10/2025 15:42:11</p>
             </div>
 
             <div class="summary">
                 <div class="card">
                     <h3>Precisión Global</h3>
                     <div class="value" style="color: #3498db;">99.6%</div>
-                    <div class="percentage">4,473 de 4,492</div>
+                    <div class="percentage">4,473 / 4,492</div>
                 </div>
                 <div class="card">
-                    <h3>Total Predicciones</h3>
+                    <h3>Total Registros</h3>
                     <div class="value" style="color: #34495e;">4,492</div>
                 </div>
                 <div class="card">
-                    <h3>Predicciones Acertadas</h3>
+                    <h3>Predicciones Correctas</h3>
                     <div class="value" style="color: #27ae60;">4,473</div>
                 </div>
                 <div class="card">
-                    <h3>Total Ausencias Reales</h3>
-                    <div class="value" style="color: #e74c3c;">1,466</div>
+                    <h3>🔴 Precisión en Ausencias</h3>
+                    <div class="value" style="color: #e74c3c;">98.9%</div>
+                    <div class="percentage">1,450 / 1,466</div>
                 </div>
             </div>
 
             <div class="content">
+                <div class="info-box">
+                    <p><strong>📊 Cómo leer este reporte:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li><strong>Precisión Global:</strong> Porcentaje de TODAS las predicciones correctas (presentes, ausentes y tardanzas)</li>
+                        <li><strong>Ausencias Detectadas:</strong> De todas las ausencias reales, cuántas detectó el modelo</li>
+                        <li><strong>Tasa Global = Predicciones Correctas / Total Registros</strong></li>
+                    </ul>
+                </div>
+
                 <h2>📊 Precisión de Predicciones por Fecha</h2>
-                <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 14px;">
-                    <strong>PA = Predicciones Acertadas</strong> | <strong>TA = Total Ausencias Reales</strong> | <strong>TPA = Tasa de Predicción Acertada</strong>
-                </p>
                 <table>
                     <thead>
                         <tr>
                             <th>Fecha</th>
-                            <th>Predicciones Acertadas (PA)</th>
-                            <th>Total de Ausencias Reales (TA)</th>
-                            <th>Tasa de Predicción Acertada (TPA)</th>
+                            <th>Total Registros</th>
+                            <th>✅ Correctas</th>
+                            <th>🔴 Ausencias Reales</th>
+                            <th>🎯 Ausencias Detectadas</th>
+                            <th>Precisión Global</th>
+                            <th>Precisión en Ausencias</th>
                         </tr>
                     </thead>
                     <tbody>
     
                         <tr class="high-accuracy">
                             <td><strong>20/06/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -200,46 +230,86 @@
         
                         <tr class="high-accuracy">
                             <td><strong>22/06/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">39</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">39</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">38</strong> / 39
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">97.4%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 97.43589743589743%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>23/06/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">25</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">25</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">24</strong> / 25
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">96.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 96.0%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>24/06/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">30</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">30</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">29</strong> / 30
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">96.7%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 96.66666666666667%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>25/06/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">31</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">31</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">31</strong> / 31
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -248,10 +318,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>26/06/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">31</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">31</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">31</strong> / 31
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -260,10 +340,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>27/06/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -272,10 +362,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>30/06/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">31</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">31</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">31</strong> / 31
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -284,22 +384,42 @@
         
                         <tr class="high-accuracy">
                             <td><strong>01/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">87</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">21</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">87</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">21</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">19</strong> / 21
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">97.8%</strong>
+                                <strong style="font-size: 16px;">97.8%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 97.75280898876404%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">90.5%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 90.47619047619048%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>02/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">24</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">24</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">24</strong> / 24
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -308,10 +428,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>03/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">23</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">23</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">23</strong> / 23
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -320,10 +450,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>04/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -332,10 +472,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>07/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">24</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">24</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">24</strong> / 24
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -344,10 +494,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>08/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">22</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">22</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">22</strong> / 22
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -356,10 +516,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>09/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">24</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">24</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">24</strong> / 24
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -368,10 +538,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>10/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">21</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">21</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">21</strong> / 21
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -380,10 +560,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>11/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -392,46 +582,86 @@
         
                         <tr class="high-accuracy">
                             <td><strong>14/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">22</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">22</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">21</strong> / 22
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">95.5%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 95.45454545454545%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>15/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">22</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">22</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">21</strong> / 22
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">95.5%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 95.45454545454545%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>16/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">24</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">24</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">23</strong> / 24
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">95.8%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 95.83333333333334%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>17/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">24</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">24</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">24</strong> / 24
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -440,10 +670,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>18/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -452,22 +692,42 @@
         
                         <tr class="high-accuracy">
                             <td><strong>21/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">23</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">23</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">22</strong> / 23
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">95.7%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 95.65217391304348%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>22/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">22</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">22</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">22</strong> / 22
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -476,22 +736,42 @@
         
                         <tr class="high-accuracy">
                             <td><strong>24/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">23</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">23</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">22</strong> / 23
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">95.7%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 95.65217391304348%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>25/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -500,10 +780,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>30/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">26</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">26</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">26</strong> / 26
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -512,10 +802,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>31/07/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">24</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">24</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">24</strong> / 24
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -524,10 +824,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>01/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -536,10 +846,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>04/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">26</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">26</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">26</strong> / 26
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -548,10 +868,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>05/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">27</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">27</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">27</strong> / 27
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -560,10 +890,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>07/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">26</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">26</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">26</strong> / 26
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -572,10 +912,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>08/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -584,10 +934,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>11/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">28</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">28</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">28</strong> / 28
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -596,10 +956,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>12/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">26</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">26</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">26</strong> / 26
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -608,10 +978,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>13/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">26</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">26</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">26</strong> / 26
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -620,10 +1000,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>14/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">28</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">28</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">28</strong> / 28
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -632,10 +1022,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>15/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -644,10 +1044,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>18/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">29</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">29</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">29</strong> / 29
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -656,10 +1066,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>19/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">31</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">31</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">31</strong> / 31
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -668,10 +1088,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>20/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">32</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">32</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">32</strong> / 32
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -680,10 +1110,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>21/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">32</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">32</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">32</strong> / 32
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -692,10 +1132,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>22/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -704,10 +1154,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>25/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">30</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">30</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">30</strong> / 30
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -716,10 +1176,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>26/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">34</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">34</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">34</strong> / 34
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -728,10 +1198,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>27/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">28</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">28</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">28</strong> / 28
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -740,22 +1220,42 @@
         
                         <tr class="high-accuracy">
                             <td><strong>28/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">31</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">31</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">30</strong> / 31
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">96.8%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 96.7741935483871%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>29/08/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -764,22 +1264,42 @@
         
                         <tr class="high-accuracy">
                             <td><strong>01/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">31</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">31</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">30</strong> / 31
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">96.8%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 96.7741935483871%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>02/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">30</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">30</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">30</strong> / 30
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -788,10 +1308,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>03/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">33</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">33</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">33</strong> / 33
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -800,10 +1330,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>04/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">35</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">35</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">35</strong> / 35
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -812,10 +1352,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>05/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -824,58 +1374,108 @@
         
                         <tr class="high-accuracy">
                             <td><strong>08/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">36</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">36</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">36</strong> / 36
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>09/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">34</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">34</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">34</strong> / 34
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>10/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">87</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">36</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">87</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">36</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">35</strong> / 36
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">97.8%</strong>
+                                <strong style="font-size: 16px;">97.8%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 97.75280898876404%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">97.2%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 97.22222222222221%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>11/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">37</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">37</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">36</strong> / 37
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">97.3%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 97.2972972972973%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>12/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">1</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">1</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">1</strong> / 1
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -884,10 +1484,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>15/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">35</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">35</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">35</strong> / 35
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -896,10 +1506,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>16/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">34</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">34</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">34</strong> / 34
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -908,10 +1528,20 @@
         
                         <tr class="high-accuracy">
                             <td><strong>17/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">89</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">34</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">89</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">34</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">34</strong> / 34
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -920,22 +1550,42 @@
         
                         <tr class="high-accuracy">
                             <td><strong>18/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">38</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">38</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">37</strong> / 38
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">97.4%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 97.36842105263158%"></div>
                                 </div>
                             </td>
                         </tr>
         
                         <tr class="high-accuracy">
                             <td><strong>19/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">3</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">2</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">3</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">2</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">2</strong> / 2
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">100.0%</strong>
+                                <strong style="font-size: 16px;">100.0%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">100.0%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 100.0%"></div>
                                 </div>
@@ -944,12 +1594,22 @@
         
                         <tr class="high-accuracy">
                             <td><strong>22/09/2025</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">88</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">36</strong></td>
+                            <td style="text-align: center;">89</td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">88</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">36</strong></td>
+                            <td style="text-align: center;">
+                                <strong style="color: #3498db;">35</strong> / 36
+                            </td>
                             <td>
-                                <strong style="font-size: 18px;">98.9%</strong>
+                                <strong style="font-size: 16px;">98.9%</strong>
                                 <div class="accuracy-bar">
                                     <div class="accuracy-fill accuracy-fill-green" style="width: 98.87640449438202%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong style="font-size: 16px; color: #27ae60;">97.2%</strong>
+                                <div class="accuracy-bar">
+                                    <div class="accuracy-fill accuracy-fill-green" style="width: 97.22222222222221%"></div>
                                 </div>
                             </td>
                         </tr>
@@ -958,11 +1618,12 @@
                     <tfoot style="background: #f8f9fa; font-weight: bold;">
                         <tr>
                             <td style="padding: 15px;"><strong>TOTAL</strong></td>
-                            <td style="text-align: center;"><strong style="color: #27ae60; font-size: 16px;">4,473</strong></td>
-                            <td style="text-align: center;"><strong style="color: #e74c3c; font-size: 16px;">1,466</strong></td>
-                            <td>
-                                <strong style="font-size: 18px;">Promedio: 99.6%</strong>
-                            </td>
+                            <td style="text-align: center;"><strong>4,492</strong></td>
+                            <td style="text-align: center;"><strong style="color: #27ae60;">4,473</strong></td>
+                            <td style="text-align: center;"><strong style="color: #e74c3c;">1,466</strong></td>
+                            <td style="text-align: center;"><strong style="color: #3498db;">1,450</strong></td>
+                            <td><strong>99.6%</strong></td>
+                            <td><strong>98.9%</strong></td>
                         </tr>
                     </tfoot>
                 </table>
