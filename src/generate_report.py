@@ -52,9 +52,9 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
 
     # ✅ CALCULAR PROBABILIDAD MENSUAL POR EMPLEADO
     reporte_mensual = reporte.groupby(['empleado_id', 'nombre_empleado', 'mes', 'anio']).agg({
-        'prob_ausente': 'mean',  # Promedio de probabilidad de ausencia
-        'prob_presente': 'mean',  # Promedio de probabilidad de asistencia
-        'prediccion': ['count', lambda x: (x == 1).sum()]  # Total registros y ausencias predichas
+        'prob_ausente': 'mean',
+        'prob_presente': 'mean',
+        'prediccion': ['count', lambda x: (x == 1).sum()]
     }).reset_index()
     
     reporte_mensual.columns = ['empleado_id', 'nombre_empleado', 'mes', 'anio', 'prob_ausencia_promedio', 'prob_asistencia_promedio', 'total_dias', 'dias_ausente_predichos']
@@ -285,7 +285,7 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                     <tbody>
     """
 
-    for _, row in reporte_mensual.iterrows():  # ✅ CAMBIADO: Sin .head(50), muestra TODOS
+    for _, row in reporte_mensual.iterrows():
         prob_ausencia_pct = row['prob_ausencia_promedio']
         prob_asistencia_pct = row['prob_asistencia_promedio']
         
@@ -380,12 +380,16 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
     else:
         html_content += "<p>✅ No hay empleados con alto riesgo de ausencia (>60%)</p>"
 
-    # Riesgo de tardanza
+    # ✅ TODAS LAS TARDANZAS (sin filtro de probabilidad)
     html_content += """
-                <h2>🟡 Empleados con Riesgo de Tardanza</h2>
+                <h2>🟡 Empleados con Riesgo de Tardanza (Todas las Probabilidades)</h2>
+                <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 14px;">
+                    ⚠️ Esta tabla muestra <strong>TODAS</strong> las tardanzas predichas, ordenadas por probabilidad descendente.
+                </p>
     """
     
-    tardanzas_pred = reporte[reporte['prob_tardanza'] > 0.5].sort_values('prob_tardanza', ascending=False).head(20)
+    # ✅ CAMBIO: Eliminar el filtro > 0.5 y mostrar TODAS las tardanzas
+    tardanzas_pred = reporte[reporte['prob_tardanza'] > 0].sort_values('prob_tardanza', ascending=False)
     
     if len(tardanzas_pred) > 0:
         html_content += """
@@ -398,6 +402,7 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                             <th>Día</th>
                             <th>Predicción</th>
                             <th>Probabilidad Tardanza</th>
+                            <th>Minutos de Tardanza</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -408,6 +413,7 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
             badge_class = ['badge-presente', 'badge-ausente', 'badge-tardanza'][pred]
             badge_text = ['PRESENTE', 'AUSENTE', 'TARDANZA'][pred]
             prob_pct = row['prob_tardanza'] * 100
+            tardanza = row['tardanza_min']
             
             html_content += f"""
                             <tr>
@@ -422,6 +428,7 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                                         <div class="prob-fill prob-fill-yellow" style="width: {prob_pct}%"></div>
                                     </div>
                                 </td>
+                                <td><strong>{tardanza:.0f}</strong> min</td>
                             </tr>
             """
         
@@ -430,7 +437,7 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                 </table>
         """
     else:
-        html_content += "<p>✅ No hay empleados con alto riesgo de tardanza (>50%)</p>"
+        html_content += "<p>✅ No hay tardanzas predichas</p>"
 
     html_content += """
             </div>
