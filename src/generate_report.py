@@ -3,23 +3,27 @@ import pickle
 from datetime import datetime
 
 def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fichajes.csv"):
+    print("📊 Iniciando generación de reporte...")
+    
     # Cargar modelo y datos
+    print("   Cargando modelo...")
     with open("models/random_forest.pkl", "rb") as f:
         model = pickle.load(f)
 
     # ✅ Cargar datos original con nombres
+    print("   Cargando datos originales...")
     df_original = pd.read_csv(original_csv_path)
     df_original.columns = [c.strip().lower() for c in df_original.columns]
     
     # Convertir fecha correctamente
     df_original['fecha'] = pd.to_datetime(df_original['fecha'], errors='coerce', dayfirst=True)
     
-    # Si hay fechas inválidas, usar fecha actual como placeholder
     if df_original['fecha'].isna().any():
         print(f"⚠️  Advertencia: {df_original['fecha'].isna().sum()} fechas inválidas encontradas")
         df_original['fecha'] = df_original['fecha'].fillna(pd.Timestamp.now())
     
     # Cargar features procesados
+    print("   Cargando features...")
     df = pd.read_csv(input_path)
 
     if "ausencia" in df.columns:
@@ -28,6 +32,7 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
         X = df
 
     # Predicciones
+    print("   Realizando predicciones...")
     predictions = model.predict(X)
     probabilities = model.predict_proba(X)
 
@@ -35,8 +40,9 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
     dias_map = {0: 'Lun', 1: 'Mar', 2: 'Mié', 3: 'Jue', 4: 'Vie', 5: 'Sáb', 6: 'Dom'}
 
     # Crear DataFrame con resultados
+    print("   Creando DataFrame de resultados...")
     reporte = pd.DataFrame({
-        'empleado_id': df_original['empleado_id'].fillna(0).astype(int),
+        'empleado_id': df_original['empleado_id'].fillna('Sin ID').astype(str),
         'nombre_empleado': df_original['nombre_empleado'].fillna('Sin nombre'),
         'fecha': df_original['fecha'],
         'fecha_str': df_original['fecha'].dt.strftime('%d/%m/%Y'),
@@ -46,21 +52,23 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
         'tardanza_min': df['tardanza_min'].fillna(0),
         'prediccion': predictions,
         'prob_presente': probabilities[:, 0],
-        'prob_ausente': probabilities[:, 1],
-        'prob_tardanza': probabilities[:, 2] if probabilities.shape[1] > 2 else [0] * len(probabilities)
+        'prob_tardanza': probabilities[:, 1]  # ✅ Solo 2 clases
     })
 
     # ✅ CALCULAR PROBABILIDAD MENSUAL POR EMPLEADO
+    print("   Calculando probabilidades mensuales...")
     reporte_mensual = reporte.groupby(['empleado_id', 'nombre_empleado', 'mes', 'anio']).agg({
-        'prob_ausente': 'mean',
+        'prob_tardanza': 'mean',
         'prob_presente': 'mean',
         'prediccion': ['count', lambda x: (x == 1).sum()]
     }).reset_index()
     
-    reporte_mensual.columns = ['empleado_id', 'nombre_empleado', 'mes', 'anio', 'prob_ausencia_promedio', 'prob_asistencia_promedio', 'total_dias', 'dias_ausente_predichos']
-    reporte_mensual['prob_ausencia_promedio'] = reporte_mensual['prob_ausencia_promedio'] * 100
+    reporte_mensual.columns = ['empleado_id', 'nombre_empleado', 'mes', 'anio', 
+                                'prob_tardanza_promedio', 'prob_asistencia_promedio', 
+                                'total_dias', 'dias_tardanza_predichos']
+    reporte_mensual['prob_tardanza_promedio'] = reporte_mensual['prob_tardanza_promedio'] * 100
     reporte_mensual['prob_asistencia_promedio'] = reporte_mensual['prob_asistencia_promedio'] * 100
-    reporte_mensual = reporte_mensual.sort_values('prob_ausencia_promedio', ascending=False)
+    reporte_mensual = reporte_mensual.sort_values('prob_tardanza_promedio', ascending=False)
 
     # Mapeo de meses
     meses_map = {1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
@@ -70,22 +78,21 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
     # Estadísticas
     total = len(reporte)
     presentes = (predictions == 0).sum()
-    ausentes = (predictions == 1).sum()
-    tardanzas = (predictions == 2).sum() if probabilities.shape[1] > 2 else 0
+    tardanzas = (predictions == 1).sum()
 
-    # Generar HTML
-    html_content = f"""
+    print("   Generando HTML...")
+    
+    # ✅ OPTIMIZACIÓN: Usar list comprehension en lugar de concatenación de strings
+    html_parts = []
+    
+    html_parts.append(f"""
     <!DOCTYPE html>
     <html>
     <head>
         <meta charset="UTF-8">
         <title>Reporte de Predicción de Asistencia</title>
         <style>
-            * {{
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }}
+            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
             body {{
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -106,14 +113,8 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                 padding: 30px;
                 text-align: center;
             }}
-            .header h1 {{
-                font-size: 36px;
-                margin-bottom: 10px;
-            }}
-            .header p {{
-                opacity: 0.9;
-                font-size: 14px;
-            }}
+            .header h1 {{ font-size: 36px; margin-bottom: 10px; }}
+            .header p {{ opacity: 0.9; font-size: 14px; }}
             .summary {{
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -145,13 +146,8 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                 font-weight: bold;
                 margin-bottom: 10px;
             }}
-            .card .percentage {{
-                font-size: 16px;
-                color: #95a5a6;
-            }}
-            .content {{
-                padding: 30px;
-            }}
+            .card .percentage {{ font-size: 16px; color: #95a5a6; }}
+            .content {{ padding: 30px; }}
             h2 {{
                 color: #2c3e50;
                 margin: 30px 0 20px 0;
@@ -177,16 +173,9 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                 font-size: 12px;
                 letter-spacing: 1px;
             }}
-            td {{
-                padding: 12px 15px;
-                border-bottom: 1px solid #ecf0f1;
-            }}
-            tr:hover {{
-                background-color: #f8f9fa;
-            }}
-            tr:last-child td {{
-                border-bottom: none;
-            }}
+            td {{ padding: 12px 15px; border-bottom: 1px solid #ecf0f1; }}
+            tr:hover {{ background-color: #f8f9fa; }}
+            tr:last-child td {{ border-bottom: none; }}
             .badge {{
                 padding: 6px 12px;
                 border-radius: 20px;
@@ -195,21 +184,9 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                 text-transform: uppercase;
                 display: inline-block;
             }}
-            .badge-presente {{
-                background: #d4edda;
-                color: #155724;
-            }}
-            .badge-ausente {{
-                background: #f8d7da;
-                color: #721c24;
-            }}
-            .badge-tardanza {{
-                background: #fff3cd;
-                color: #856404;
-            }}
-            .high-risk {{
-                background-color: #fff5f5 !important;
-            }}
+            .badge-presente {{ background: #d4edda; color: #155724; }}
+            .badge-tardanza {{ background: #fff3cd; color: #856404; }}
+            .high-risk {{ background-color: #fff5f5 !important; }}
             .prob-bar {{
                 height: 8px;
                 background: #ecf0f1;
@@ -217,19 +194,9 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                 overflow: hidden;
                 margin-top: 5px;
             }}
-            .prob-fill {{
-                height: 100%;
-                transition: width 0.3s;
-            }}
-            .prob-fill-red {{
-                background: linear-gradient(90deg, #e74c3c, #c0392b);
-            }}
-            .prob-fill-yellow {{
-                background: linear-gradient(90deg, #f39c12, #e67e22);
-            }}
-            .prob-fill-green {{
-                background: linear-gradient(90deg, #2ecc71, #27ae60);
-            }}
+            .prob-fill {{ height: 100%; transition: width 0.3s; }}
+            .prob-fill-yellow {{ background: linear-gradient(90deg, #f39c12, #e67e22); }}
+            .prob-fill-green {{ background: linear-gradient(90deg, #2ecc71, #27ae60); }}
         </style>
     </head>
     <body>
@@ -250,11 +217,6 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                     <div class="percentage">{presentes/total*100:.1f}%</div>
                 </div>
                 <div class="card">
-                    <h3>🔴 Ausentes</h3>
-                    <div class="value" style="color: #e74c3c;">{ausentes:,}</div>
-                    <div class="percentage">{ausentes/total*100:.1f}%</div>
-                </div>
-                <div class="card">
                     <h3>🟡 Tardanzas</h3>
                     <div class="value" style="color: #f39c12;">{tardanzas:,}</div>
                     <div class="percentage">{tardanzas/total*100:.1f}%</div>
@@ -262,11 +224,9 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
             </div>
 
             <div class="content">
-                <h2>📅 Probabilidad de Asistencia y Ausencia Mensual por Empleado</h2>
+                <h2>📅 Probabilidad Mensual por Empleado (Top 50)</h2>
                 <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 14px;">
-                    📊 Esta tabla muestra el promedio de probabilidades de cada empleado por mes. 
-                    <strong style="color: #27ae60;">Verde = Probabilidad de asistir</strong> | 
-                    <strong style="color: #e74c3c;">Rojo = Probabilidad de faltar</strong>
+                    📊 Top 50 empleados con mayor probabilidad de tardanza mensual
                 </p>
                 <table>
                     <thead>
@@ -276,123 +236,68 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                             <th>Mes</th>
                             <th>Año</th>
                             <th>🟢 Prob. Asistencia</th>
-                            <th>🔴 Prob. Ausencia</th>
+                            <th>🟡 Prob. Tardanza</th>
                             <th>Días Laborales</th>
-                            <th>Ausencias Predichas</th>
+                            <th>Tardanzas Predichas</th>
                             <th>Nivel de Riesgo</th>
                         </tr>
                     </thead>
                     <tbody>
-    """
+    """)
 
-    for _, row in reporte_mensual.iterrows():
-        prob_ausencia_pct = row['prob_ausencia_promedio']
+    # ✅ OPTIMIZACIÓN: Solo mostrar top 50 empleados
+    for _, row in reporte_mensual.head(50).iterrows():
+        prob_tardanza_pct = row['prob_tardanza_promedio']
         prob_asistencia_pct = row['prob_asistencia_promedio']
         
-        if prob_ausencia_pct >= 60:
+        if prob_tardanza_pct >= 60:
             nivel_riesgo = "🔥 ALTO"
             row_class = "high-risk"
-        elif prob_ausencia_pct >= 40:
+        elif prob_tardanza_pct >= 40:
             nivel_riesgo = "⚠️ MEDIO"
             row_class = ""
         else:
             nivel_riesgo = "✅ BAJO"
             row_class = ""
         
-        html_content += f"""
+        empleado_id_corto = str(row['empleado_id'])[:8] + "..." if len(str(row['empleado_id'])) > 8 else str(row['empleado_id'])
+        
+        html_parts.append(f"""
                         <tr class="{row_class}">
-                            <td><strong>{row['empleado_id']}</strong></td>
+                            <td><strong>{empleado_id_corto}</strong></td>
                             <td><strong>{row['nombre_empleado']}</strong></td>
                             <td>{row['mes_nombre']}</td>
                             <td>{int(row['anio'])}</td>
-                            <td style="background: linear-gradient(to right, rgba(46, 204, 113, 0.1) 0%, rgba(46, 204, 113, 0.1) {min(prob_asistencia_pct, 100)}%, white {min(prob_asistencia_pct, 100)}%);">
+                            <td>
                                 <strong style="color: #27ae60; font-size: 16px;">{prob_asistencia_pct:.1f}%</strong>
-                                <div class="prob-bar" style="margin-top: 8px;">
+                                <div class="prob-bar">
                                     <div class="prob-fill prob-fill-green" style="width: {min(prob_asistencia_pct, 100)}%"></div>
                                 </div>
                             </td>
-                            <td style="background: linear-gradient(to right, rgba(231, 76, 60, 0.1) 0%, rgba(231, 76, 60, 0.1) {min(prob_ausencia_pct, 100)}%, white {min(prob_ausencia_pct, 100)}%);">
-                                <strong style="color: #e74c3c; font-size: 16px;">{prob_ausencia_pct:.1f}%</strong>
-                                <div class="prob-bar" style="margin-top: 8px;">
-                                    <div class="prob-fill prob-fill-{'red' if prob_ausencia_pct >= 60 else 'yellow' if prob_ausencia_pct >= 40 else 'green'}" style="width: {min(prob_ausencia_pct, 100)}%"></div>
+                            <td>
+                                <strong style="color: #f39c12; font-size: 16px;">{prob_tardanza_pct:.1f}%</strong>
+                                <div class="prob-bar">
+                                    <div class="prob-fill prob-fill-yellow" style="width: {min(prob_tardanza_pct, 100)}%"></div>
                                 </div>
                             </td>
                             <td><strong>{int(row['total_dias'])}</strong> días</td>
-                            <td><strong style="color: #e74c3c;">{int(row['dias_ausente_predichos'])}</strong> días</td>
+                            <td><strong style="color: #f39c12;">{int(row['dias_tardanza_predichos'])}</strong> días</td>
                             <td><strong>{nivel_riesgo}</strong></td>
                         </tr>
-        """
+        """)
 
-    html_content += """
+    html_parts.append("""
                     </tbody>
                 </table>
 
-                <h2>⚠️ Empleados en Alto Riesgo de Ausencia (Diario)</h2>
-    """
+                <h2>🟡 Empleados con Mayor Riesgo de Tardanza (Top 30 Días)</h2>
+    """)
 
-    # Alto riesgo de ausencia
-    alto_riesgo = reporte[reporte['prob_ausente'] > 0.6].sort_values('prob_ausente', ascending=False).head(20)
-    
-    if len(alto_riesgo) > 0:
-        html_content += """
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Fecha</th>
-                            <th>Día</th>
-                            <th>Predicción</th>
-                            <th>Probabilidad Ausencia</th>
-                            <th>Confianza</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-        """
-        
-        for _, row in alto_riesgo.iterrows():
-            pred = int(row['prediccion'])
-            badge_class = ['badge-presente', 'badge-ausente', 'badge-tardanza'][pred]
-            badge_text = ['PRESENTE', 'AUSENTE', 'TARDANZA'][pred]
-            prob_pct = row['prob_ausente'] * 100
-            
-            html_content += f"""
-                            <tr class="high-risk">
-                                <td><strong>{row['empleado_id']}</strong></td>
-                                <td><strong>{row['nombre_empleado']}</strong></td>
-                                <td>{row['fecha_str']}</td>
-                                <td>{row['dia_semana']}</td>
-                                <td><span class="badge {badge_class}">{badge_text}</span></td>
-                                <td>
-                                    <strong>{prob_pct:.1f}%</strong>
-                                    <div class="prob-bar">
-                                        <div class="prob-fill prob-fill-red" style="width: {prob_pct}%"></div>
-                                    </div>
-                                </td>
-                                <td>{'🔥 Alta' if prob_pct > 70 else '⚠️ Media'}</td>
-                            </tr>
-            """
-        
-        html_content += """
-                    </tbody>
-                </table>
-        """
-    else:
-        html_content += "<p>✅ No hay empleados con alto riesgo de ausencia (>60%)</p>"
-
-    # ✅ TODAS LAS TARDANZAS (sin filtro de probabilidad)
-    html_content += """
-                <h2>🟡 Empleados con Riesgo de Tardanza (Todas las Probabilidades)</h2>
-                <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 14px;">
-                    ⚠️ Esta tabla muestra <strong>TODAS</strong> las tardanzas predichas, ordenadas por probabilidad descendente.
-                </p>
-    """
-    
-    # ✅ CAMBIO: Eliminar el filtro > 0.5 y mostrar TODAS las tardanzas
-    tardanzas_pred = reporte[reporte['prob_tardanza'] > 0].sort_values('prob_tardanza', ascending=False)
+    # ✅ OPTIMIZACIÓN: Solo top 30 tardanzas
+    tardanzas_pred = reporte[reporte['prob_tardanza'] > 0.5].sort_values('prob_tardanza', ascending=False).head(30)
     
     if len(tardanzas_pred) > 0:
-        html_content += """
+        html_parts.append("""
                 <table>
                     <thead>
                         <tr>
@@ -406,18 +311,19 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                         </tr>
                     </thead>
                     <tbody>
-        """
+        """)
         
         for _, row in tardanzas_pred.iterrows():
             pred = int(row['prediccion'])
-            badge_class = ['badge-presente', 'badge-ausente', 'badge-tardanza'][pred]
-            badge_text = ['PRESENTE', 'AUSENTE', 'TARDANZA'][pred]
+            badge_class = 'badge-presente' if pred == 0 else 'badge-tardanza'
+            badge_text = 'PRESENTE' if pred == 0 else 'TARDANZA'
             prob_pct = row['prob_tardanza'] * 100
             tardanza = row['tardanza_min']
+            empleado_id_corto = str(row['empleado_id'])[:8] + "..." if len(str(row['empleado_id'])) > 8 else str(row['empleado_id'])
             
-            html_content += f"""
+            html_parts.append(f"""
                             <tr>
-                                <td><strong>{row['empleado_id']}</strong></td>
+                                <td><strong>{empleado_id_corto}</strong></td>
                                 <td><strong>{row['nombre_empleado']}</strong></td>
                                 <td>{row['fecha_str']}</td>
                                 <td>{row['dia_semana']}</td>
@@ -430,29 +336,34 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
                                 </td>
                                 <td><strong>{tardanza:.0f}</strong> min</td>
                             </tr>
-            """
+            """)
         
-        html_content += """
+        html_parts.append("""
                     </tbody>
                 </table>
-        """
+        """)
     else:
-        html_content += "<p>✅ No hay tardanzas predichas</p>"
+        html_parts.append("<p>✅ No hay tardanzas de alto riesgo (>50%)</p>")
 
-    html_content += """
+    html_parts.append("""
             </div>
         </div>
     </body>
     </html>
-    """
+    """)
+
+    # ✅ OPTIMIZACIÓN: Join una sola vez al final
+    html_content = "".join(html_parts)
 
     # Guardar archivos
     import os
     os.makedirs("reports", exist_ok=True)
     
+    print("   Guardando archivo HTML...")
     with open("reports/reporte_ausencias.html", "w", encoding="utf-8") as f:
         f.write(html_content)
 
+    print("   Guardando CSVs...")
     reporte.to_csv("data/processed/predicciones_detalladas.csv", index=False)
     reporte_mensual.to_csv("data/processed/probabilidad_mensual_empleados.csv", index=False)
 
