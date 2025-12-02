@@ -50,15 +50,16 @@ def generate_individual_reports(input_path: str, original_csv_path: str = "data/
     meses_map = {1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
                  7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'}
     
+    # Extraer mes y año de la columna fecha en df_original
     reporte = pd.DataFrame({
         'empleado_id': df_original['empleado_id'].fillna('Sin ID').astype(str),
         'nombre_empleado': df_original['nombre_empleado'].fillna('Sin nombre'),
         'fecha': df_original['fecha'],
         'fecha_str': df_original['fecha'].dt.strftime('%d/%m/%Y'),
         'dia_semana': df['dia_semana'].fillna(0).astype(int).map(dias_map),
-        'mes': df['mes'].fillna(0).astype(int),
-        'mes_nombre': df['mes'].fillna(0).astype(int).map(meses_map),
-        'anio': df_original['fecha'].dt.year,
+        'mes': df_original['fecha'].dt.month.fillna(0).astype(int),  # CORREGIDO: usar fecha de df_original
+        'mes_nombre': df_original['fecha'].dt.month.fillna(0).astype(int).map(meses_map),  # CORREGIDO
+        'anio': df_original['fecha'].dt.year.fillna(0).astype(int),  # CORREGIDO
         'tardanza_min': df['tardanza_min'].fillna(0),
         'prediccion': predictions,
         'prob_presente': probabilities[:, 0],
@@ -73,9 +74,11 @@ def generate_individual_reports(input_path: str, original_csv_path: str = "data/
     total_empleados = len(empleados_unicos)
     
     print(f"   Generando reportes para {total_empleados} empleados...")
+    print(f"   Total de registros en reporte: {len(reporte)}")
     
     for i, ((empleado_id, nombre), datos_empleado) in enumerate(empleados_unicos, 1):
-        print(f"   [{i}/{total_empleados}] Generando reporte para: {nombre}")
+        num_registros = len(datos_empleado)
+        print(f"   [{i}/{total_empleados}] Generando reporte para: {nombre} ({num_registros} registros)")
         generar_reporte_html_empleado(empleado_id, nombre, datos_empleado)
     
     print(f"\n✅ {total_empleados} reportes individuales generados en: reports/individuales/")
@@ -95,7 +98,7 @@ def generar_reporte_html_empleado(empleado_id: str, nombre: str, datos: pd.DataF
     stats_mensuales = datos.groupby(['mes', 'mes_nombre', 'anio']).agg({
         'prediccion': ['count', lambda x: (x == 1).sum()],
         'prob_tardanza': 'mean',
-        'tardanza_min': 'mean'
+        'tardanza_min': lambda x: x[datos.loc[x.index, 'prediccion'] == 1].mean() if (datos.loc[x.index, 'prediccion'] == 1).any() else 0
     }).reset_index()
     
     stats_mensuales.columns = ['mes', 'mes_nombre', 'anio', 'total_dias', 'dias_tardanza', 'prob_tardanza_pct', 'tardanza_promedio']
@@ -234,11 +237,6 @@ def generar_reporte_html_empleado(empleado_id: str, nombre: str, datos: pd.DataF
                     <div class="value" style="color: #f39c12;">{dias_tardanza}</div>
                     <div class="percentage">{dias_tardanza/total_dias*100:.1f}%</div>
                 </div>
-                <div class="card">
-                    <h3>⏱️ Tardanza Promedio</h3>
-                    <div class="value" style="color: #e74c3c;">{tardanza_promedio:.0f}</div>
-                    <div class="percentage">minutos</div>
-                </div>
             </div>
 
             <div class="content">
@@ -251,7 +249,6 @@ def generar_reporte_html_empleado(empleado_id: str, nombre: str, datos: pd.DataF
                             <th>Días Laborados</th>
                             <th>Tardanzas</th>
                             <th>Prob. Tardanza</th>
-                            <th>Tardanza Promedio</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -259,6 +256,7 @@ def generar_reporte_html_empleado(empleado_id: str, nombre: str, datos: pd.DataF
     
     for _, row in stats_mensuales.iterrows():
         row_class = "high-risk" if row['prob_tardanza_pct'] >= 50 else ""
+        tardanza_display = f"{row['tardanza_promedio']:.0f} min" if row['dias_tardanza'] > 0 else "N/A"
         html += f"""
                         <tr class="{row_class}">
                             <td><strong>{row['mes_nombre']}</strong></td>
@@ -271,7 +269,6 @@ def generar_reporte_html_empleado(empleado_id: str, nombre: str, datos: pd.DataF
                                     <div class="prob-fill prob-fill-yellow" style="width: {min(row['prob_tardanza_pct'], 100)}%"></div>
                                 </div>
                             </td>
-                            <td>{row['tardanza_promedio']:.0f} min</td>
                         </tr>
         """
     
