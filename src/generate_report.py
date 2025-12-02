@@ -373,6 +373,19 @@ def generate_html_report(input_path: str, original_csv_path: str = "data/raw/fic
     print("   📊 CSV Mensual:    data/processed/probabilidad_mensual_empleados.csv")
     print("\n💡 Abre el archivo HTML en tu navegador para ver el reporte visual")
 
+def generate_all_reports(input_path: str, original_csv_path: str = "data/raw/fichajes.csv"):
+    """Genera tanto el reporte general como los reportes individuales"""
+    print("🚀 Generando todos los reportes...\n")
+    
+    # Reporte general
+    generate_html_report(input_path, original_csv_path)
+    
+    # Reportes individuales
+    from generate_individual_reports import generate_individual_reports
+    generate_individual_reports(input_path, original_csv_path)
+    
+    print("\n🎉 ¡Todos los reportes generados exitosamente!")
+
 if __name__ == "__main__":
     import os
     os.makedirs("reports", exist_ok=True)
